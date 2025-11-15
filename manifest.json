@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Developer Time Logger",
+  "version": "1.3.4",
+  "description": "Log and track time spent on development tasks",
+  "permissions": ["https://timesheet-plugin-js-fzhee9g0h0e9ergz.centralindia-01.azurewebsites.net/*", "storage", "activeTab", "tabs","http://localhost:7071/api/addLog","http://localhost:7071/api/getLogs"],
+  "host_permissions": [
+    "https://timesheet-plugin-js-fzhee9g0h0e9ergz.centralindia-01.azurewebsites.net/*",
+    "https://dev.azure.com/*",
+    "https://app.vssps.visualstudio.com/*",
+    "https://*.visualstudio.com/*",
+    "https://*.dev.azure.com/*",
+    "https://chrome-ext-timelogger-dbc8ctcbe8f7gpc4.centralindia-01.azurewebsites.net/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://dev.azure.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Developer Time Logger",
+    "default_icon": {
+      "16": "images/image16.png",
+      "48": "images/image48.png",
+      "128": "images/image128.png"
+    }
+  },
+  "icons": {
+    "16": "images/image16.png",
+    "48": "images/image48.png",
+    "128": "images/image128.png"
+  }
+}

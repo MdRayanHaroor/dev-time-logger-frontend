@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Time Logger</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Developer Time Logger</h1>
+    </header>
+
+    <div id="message-container"></div>
+
+    <section class="settings-section">
+      <details>
+        <summary>Settings</summary>
+        <div class="settings-content">
+          <div id="orgPatListContainer">
+            <h3>Saved Organizations</h3>
+            <div id="orgPatList"></div>
+          </div>
+          <form id="addOrgForm" class="settings-form">
+            <h3 id="settingsFormTitle">Add New Organization</h3>
+            <input type="hidden" id="editingOrgName">
+            
+            <input type="text" id="newOrganization" placeholder="Organization Name" required>
+            <input type="text" id="newAssignedToName" placeholder="Your 'Assigned To' Name" required>
+            <div class="pat-input-group">
+              <input type="password" id="newPat" placeholder="Personal Access Token" required>
+              <button type="button" id="toggleNewPat" class="toggle-btn">👁</button>
+            </div>
+            <label for="newExpiryDate" class="expiry-label">Expiry Date:</label>
+            <input type="date" id="newExpiryDate" required>
+            <button type="submit" id="addOrUpdateOrgBtn" class="save-btn">Add Organization</button>
+          </form>
+          <button type="button" id="clearAllSettingsBtn" class="clear-btn">Reset Form</button>
+        </div>
+      </details>
+    </section>
+
+    <main>
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="logTimeTab">Log Time</button>
+        <button class="tab-btn" data-tab="viewLogsTab">View Logs</button>
+      </div>
+
+      <div id="logTimeTab" class="tab-content active">
+        <section class="add-task-section">
+          <h2>
+            Add Time Log
+            <button type="button" id="retryButton" class="retry-btn" title="Detect current Azure DevOps work item">🔄</button>
+          </h2>
+          <form id="addTaskForm">
+            <div class="form-group">
+              <label for="organizationSelect">Organization:</label>
+              <select id="organizationSelect" required><option value="">Select organization...</option></select>
+            </div>
+            <div class="form-group" id="projectSelectorGroup">
+              <label for="projectSelector">Project:</label>
+              <select id="projectSelector" required><option value="">Select project...</option></select>
+              <div id="projectLoading" class="loading-indicator" style="display: none;">Loading projects...</div>
+            </div>
+            <div class="form-group" id="workItemSelectorGroup">
+              <label for="workItemSelector">Work Item:</label>
+              <select id="workItemSelector" required>
+                <option value="">Select work item...</option>
+                <optgroup label="My Work Items" id="addTaskWorkItemsGroup"></optgroup>
+                <optgroup label="My Backlog" id="addTaskBacklogGroup"></optgroup>
+              </select>
+              <div id="workItemLoading" class="loading-indicator" style="display: none;">Loading work items...</div>
+            </div>
+            <div class="form-group">
+              <label for="taskDescription">Description:</label>
+              <textarea id="taskDescription" rows="2" placeholder="What did you work on?"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="taskDate">Date:</label>
+              <input type="date" id="taskDate" required>
+            </div>
+            <div class="time-inputs">
+              <div class="form-group">
+                <label for="hours">Hours:</label>
+                <input type="number" id="hours" min="0" max="23" value="0" required>
+              </div>
+              <div class="form-group">
+                <label for="minutes">Minutes:</label>
+                <input type="number" id="minutes" min="0" max="59" value="0" required>
+              </div>
+            </div>
+            <button type="submit" class="add-btn">Add Time Log</button>
+            <div class="form-group" style="margin-top: 10px;">
+              <label for="">All fields are required*</label>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <div id="viewLogsTab" class="tab-content">
+        <section class="view-logs-section">
+          <h2>View Logs
+            <button type="button" id="refreshLogsBtn" class="retry-btn" title="Refresh logs">🔄</button>
+          </h2>
+          <div class="filters">
+            <div class="form-group">
+              <label for="filterDate">Date:</label>
+              <input type="date" id="filterDate">
+            </div>
+            <div class="form-group">
+              <label for="viewOrgSelector">Organization:</label>
+              <select id="viewOrgSelector"><option value="">All organizations</option></select>
+            </div>
+            <div class="form-group" id="viewProjectSelectorGroup" style="display: none;">
+              <label for="viewProjectSelector">Project:</label>
+              <select id="viewProjectSelector"><option value="">All projects</option></select>
+              <div id="viewProjectLoading" class="loading-indicator" style="display: none;">Loading projects...</div>
+            </div>
+            <div class="form-group" id="viewWorkItemSelectorGroup" style="display: none;">
+              <label for="viewWorkItemSelector">Work Item:</label>
+              <select id="viewWorkItemSelector">
+                <option value="">All work items</option>
+                <optgroup label="My Work Items" id="viewWorkItemsGroup"></optgroup>
+                <optgroup label="My Backlog" id="viewBacklogGroup"></optgroup>
+              </select>
+              <div id="viewWorkItemLoading" class="loading-indicator" style="display: none;">Loading work items...</div>
+            </div>
+          </div>
+
+          <button type="button" id="clearFiltersBtn" class="add-btn" style="margin-top: 4px; margin-bottom: 12px;">Clear Filters</button>
+
+          <div id="taskList" class="task-list">
+            <p class="no-tasks">Select a date to view tasks</p>
+          </div>
+          <div id="dailyTotal" class="daily-total">
+            <strong>Total Time Spent - 0h 0m</strong>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="storage.js"></script>
+  <script src="api.js"></script>
+  <script src="ui.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
