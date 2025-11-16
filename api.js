@@ -54,3 +54,30 @@ async function fetchWorkItems(pat, org, projectId, query) {
   }
   return { value: [] };
 }
+
+// 🆕 ADDED: New function to fetch total time for a specific work item
+async function fetchWorkItemTotalTime(pat, org, workItemId
+  // , assignedToName
+) {
+  console.log("Fetching total time for Work Item:", workItemId, "Organization:", org);
+  const response = await fetch(
+    // 🎯 Use the new Azure Function endpoint
+    //`https://timesheet-plugin-js-fzhee9g0h0e9ergz.centralindia-01.azurewebsites.net/api/getTotalLog?workItemId=${workItemId}&assignedTo=${assignedToName}&organization=${org}`,
+    // `http://localhost:7071/api/getTotalLog?workItemId=${workItemId}&organization=${org}`,
+    `https://timesheet-plugin-js-fzhee9g0h0e9ergz.centralindia-01.azurewebsites.net/api/getTotalLog?workItemId=${workItemId}&organization=${org}`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(pat),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: Failed to fetch total time.`);
+  }
+
+  // The API is expected to return a payload like: { totalMinutes: 450 }
+  const data = await response.json();
+  return data;
+}
+
+export { fetchProjects, fetchWorkItems, fetchWorkItemTotalTime };

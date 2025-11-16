@@ -12,7 +12,6 @@ function sanitizeInput(input) {
   return input.replace(/[^a-zA-Z0-9\-_]/g, '');
 }
 
-
 // ✅ REVISED: This function now consistently returns the full ARRAY of settings.
 async function getADOSettings() {
   const result = await chrome.storage.local.get(["adoSettings"]);
@@ -97,7 +96,6 @@ async function getTasksForDate(date) {
     return []; 
   }
 }
-
 
 // ✅ REVISED: This function now correctly uses the settings for the specific organization of the task being saved.
 async function saveTasksForDate(date, tasks) {
@@ -231,7 +229,6 @@ async function deleteLog(date, logId, organization) {
   }
 }
 
-
 /**
  * Fetches details for a given work item and its parent hierarchy in an efficient manner.
  * This combines the logic of getWorkItemDetails and getWorkItemHierarchy.
@@ -317,3 +314,61 @@ function stripHtml(html) {
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText || "";
 }
+
+/**
+ * 🆕 ADDED: New function to get the total logged time for a work item
+ * @param {number} workItemId The ID of the work item.
+ * @param {string} organization The organization name.
+ * @returns {Promise<number>} The total minutes logged.
+ */
+async function getWorkItemTotalTime(workItemId, organization) {
+  if (!workItemId || !organization) {
+      return { totalMinutes: 0, hours: 0, minutes: 0 };
+  }
+  
+  try {
+    const allSettings = await getADOSettings();
+    const adoSettings = allSettings.find(s => s.organization === organization);
+
+    if (!adoSettings || !adoSettings.pat 
+      // || !adoSettings.assignedToName
+    ) {
+      console.warn(`ADO settings incomplete for organization: ${organization}.`);
+      return { totalMinutes: 0, hours: 0, minutes: 0 };
+    }
+
+    // Dynamic import inside try block where it belongs
+    // Using a simpler name for the import variable for clarity
+    const apiModule = await import(chrome.runtime.getURL("api.js"));
+    
+    // Call the API function
+    const timeData = await apiModule.fetchWorkItemTotalTime(
+      adoSettings.pat, 
+      organization, 
+      workItemId, 
+      // adoSettings.assignedToName
+    );
+
+    // Return the structure provided by the new API
+    return {
+        totalMinutes: timeData.totalMinutes || 0,
+        hours: timeData.hours || 0,
+        minutes: timeData.minutes || 0,
+    };
+  } catch (err) {
+    console.error("Error fetching work item total time:", err.message);
+    // 🎯 IMPORTANT: Return the expected object shape on failure
+    return { totalMinutes: 0, hours: 0, minutes: 0 }; 
+  }
+}
+
+export {
+  getWorkItemTotalTime,
+  getADOSettings,
+  saveADOSettings,
+  clearADOSettings,
+  getTasksForDate,
+  saveTasksForDate,
+  deleteLog,
+  getWorkItemDetailsAndHierarchy
+};

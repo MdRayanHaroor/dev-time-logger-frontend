@@ -102,3 +102,12 @@ function showLoading(elementId, show) {
     element.style.display = show ? "block" : "none";
   }
 }
+
+export {
+  showMessage,
+  formatTime,
+  displayDailyTotal,
+  displayTasks,
+  togglePATVisibility,
+  showLoading
+};

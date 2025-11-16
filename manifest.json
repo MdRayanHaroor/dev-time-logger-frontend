@@ -35,5 +35,11 @@
     "16": "images/image16.png",
     "48": "images/image48.png",
     "128": "images/image128.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["storage.js", "ui.js", "api.js", "images/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

@@ -134,7 +134,7 @@ function attachEventListeners() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("[v0] Popup DOM loaded, initializing...");
+  console.log("Popup DOM loaded, initializing...");
   initializeUI();
   attachEventListeners();
   await loadTasksForDate(document.getElementById(UI.filterDate).value);
@@ -653,7 +653,7 @@ function applyFiltersToTasks(tasks, date) {
 }
 
 async function handleRetryClick() {
-    console.log("[v0] Retry button clicked - manually detecting work item");
+    console.log("Retry button clicked - manually detecting work item");
     const retryBtn = document.getElementById(UI.retryButton);
     try {
         retryBtn.innerHTML = "⏳";
