@@ -2,6 +2,26 @@
 
 // A centralized place for all DOM element IDs to prevent typos
 // and make the code easier to maintain.
+import {
+  getADOSettings,
+  saveADOSettings,
+  deleteLog,
+  getTasksForDate,
+  getWorkItemDetailsAndHierarchy,
+} from './storage.js';
+
+import {
+  fetchProjects,
+  fetchWorkItems,
+} from './api.js';
+
+import {
+  showMessage,
+  formatTime,
+  displayDailyTotal,
+  showLoading,
+} from './ui.js';
+
 const UI = {
   // Dates
   taskDate: "taskDate",
