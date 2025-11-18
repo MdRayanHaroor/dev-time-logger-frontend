@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Developer Time Logger",
-  "version": "1.3.4",
+  "version": "1.3.6",
   "description": "Log and track time spent on development tasks",
   "permissions": ["https://timesheet-plugin-js-fzhee9g0h0e9ergz.centralindia-01.azurewebsites.net/*", "storage", "activeTab", "tabs","http://localhost:7071/api/addLog","http://localhost:7071/api/getLogs"],
   "host_permissions": [
